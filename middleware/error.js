@@ -3,10 +3,10 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
 
-  error.message = err.message;  
+  error.message = err.message;   
 
   // Error Mongoose ObjectId
-  if (err.name === 'CastError') {
+  if (err.name === 'CastError' || err.name === 'Error') {
     const message = `Recurso no encontrado`;
     error = new ErrorResponse(message, 404);
   }

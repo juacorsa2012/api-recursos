@@ -27,7 +27,7 @@ exports.obtenerEditorial = asyncHandler(async (req, res, next) => {
 exports.registrarEditorial = asyncHandler(async (req, res, next) => {
 	const editorial = await Editorial.create(req.body);
 
-  	res.status(200).json({
+  	res.status(201).json({
     	success: true,
     	data: editorial
   	});

@@ -1,6 +1,10 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+### Commit 4. 31-10-2019
+* Se teminan los tests de los temas.
+* Se teminan los tests de los idiomas.
+
 ### Commit 3. 30-10-2019
 * Se crea el seeder de temas, editoriales, fabricantes e idiomas.
 * Se instala mocha, chai, chai-http y supertest en mode -D

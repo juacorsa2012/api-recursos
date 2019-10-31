@@ -27,7 +27,7 @@ exports.obtenerTema = asyncHandler(async (req, res, next) => {
 exports.registrarTema = asyncHandler(async (req, res, next) => {
 	const tema = await Tema.create(req.body);
 
-  	res.status(200).json({
+  	res.status(201).json({
     	success: true,
     	data: tema
   	});

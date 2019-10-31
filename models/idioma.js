@@ -9,7 +9,7 @@ const idiomaSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxlength: [60, 'El nombre debe tener como máximo 60 caracteres'],
-      minlength: [5, 'El nombre debe tener al menos 5 caracteres']      
+      minlength: [3, 'El nombre debe tener al menos 3 caracteres']      
     },
   created_at: {
       type: Date,

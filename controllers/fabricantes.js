@@ -27,7 +27,7 @@ exports.obtenerFabricante = asyncHandler(async (req, res, next) => {
 exports.registrarFabricante = asyncHandler(async (req, res, next) => {
 	const fabricante = await Fabricante.create(req.body);
 
-  	res.status(200).json({
+  	res.status(201).json({
     	success: true,
     	data: fabricante
   	});
