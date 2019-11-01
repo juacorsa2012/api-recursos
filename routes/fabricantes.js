@@ -10,7 +10,7 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
-  .get(obtenerFabricante)
+  .get(obtenerFabricantes)
   .post(registrarFabricante);
 
 router
