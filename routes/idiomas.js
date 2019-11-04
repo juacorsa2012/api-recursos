@@ -6,6 +6,8 @@ const {
 	registrarIdioma, 
 	actualizarIdioma} = require('../controllers/idiomas');
 
+const Idioma = require('../models/idioma');
+const advancedQuery = require('../middleware/advancedQuery');
 const router = express.Router({ mergeParams: true });
 
 router

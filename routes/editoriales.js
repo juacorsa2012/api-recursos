@@ -5,6 +5,8 @@ const {
 	registrarEditorial, 
 	actualizarEditorial} = require('../controllers/editoriales');
 
+const Editorial = require('../models/editorial');
+const advancedQuery = require('../middleware/advancedQuery');
 const router = express.Router({ mergeParams: true });
 
 router

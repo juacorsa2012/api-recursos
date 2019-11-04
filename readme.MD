@@ -1,13 +1,17 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+
+### Commit 6. 4-11-2019
+* Se crea el middleware advancedQuery para la gestión de los parámetros de las rutas GET.
+
 ### Commit 5. 1-11-2019
-* Se teminan los tests de las editoriales.
-* Se teminan los tests de los fabricantes.
+* Se terminan los tests de las editoriales.
+* Se terminan los tests de los fabricantes.
 
 ### Commit 4. 31-10-2019
-* Se teminan los tests de los temas.
-* Se teminan los tests de los idiomas.
+* Se terminan los tests de los temas.
+* Se terminan los tests de los idiomas.
 
 ### Commit 3. 30-10-2019
 * Se crea el seeder de temas, editoriales, fabricantes e idiomas.

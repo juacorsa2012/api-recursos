@@ -3,12 +3,7 @@ const asyncHandler = require('../middleware/async');
 const Tema = require('../models/tema');
 
 exports.obtenerTemas = asyncHandler(async (req, res, next) => {
-	const temas = await Tema.find({});
-
-  	return res.status(200).json({
-  		success: true,
-  		data: temas
-  	});
+	res.status(200).json(res.advancedQuery);  	
 });
 
 exports.obtenerTema = asyncHandler(async (req, res, next) => {

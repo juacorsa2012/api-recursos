@@ -6,6 +6,8 @@ const {
 	registrarFabricante, 
 	actualizarFabricante} = require('../controllers/fabricantes');
 
+const Fabricante = require('../models/fabricante');
+const advancedQuery = require('../middleware/advancedQuery');
 const router = express.Router({ mergeParams: true });
 
 router

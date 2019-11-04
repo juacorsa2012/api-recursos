@@ -6,11 +6,13 @@ const {
 	registrarTema, 
 	actualizarTema} = require('../controllers/temas');
 
+const Tema = require('../models/tema');
+const advancedQuery = require('../middleware/advancedQuery');
 const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
-  .get(obtenerTemas)
+  .get(advancedQuery(Tema, ''), obtenerTemas)
   .post(registrarTema);
 
 router
