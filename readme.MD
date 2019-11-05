@@ -2,6 +2,16 @@
 
 
 
+### Commit 7. 5-11-2019
+* Se instalan los paquetes jsonwebtoken y bcryptjs.
+* Se crea el modelo de usuario.
+* Se crea el controlador y ruta auth.
+* Se crea el registro del usuario con encriptación de contraseña.
+* Se crea la ruta login.
+* Se crea el middleware protect, para proteger el acceso a las rutas.
+* Se crea la ruta /auth/me y su función getMe.
+* Se crea la función isRole para autorizar el acceso a las rutas a determinados roles.
+
 ### Commit 6. 4-11-2019
 * Se crea el middleware advancedQuery para la gestión de los parámetros de las rutas GET.
 

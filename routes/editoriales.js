@@ -7,6 +7,8 @@ const {
 
 const Editorial = require('../models/editorial');
 const advancedQuery = require('../middleware/advancedQuery');
+const { protect, isRole } = require('../middleware/auth');
+
 const router = express.Router({ mergeParams: true });
 
 router

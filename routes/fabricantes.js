@@ -8,6 +8,8 @@ const {
 
 const Fabricante = require('../models/fabricante');
 const advancedQuery = require('../middleware/advancedQuery');
+const { protect, isRole } = require('../middleware/auth');
+
 const router = express.Router({ mergeParams: true });
 
 router
