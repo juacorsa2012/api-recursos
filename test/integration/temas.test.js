@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
 const { chai, server, should } = require("./config");
-
 const Tema  = require('../../models/tema');
 const tema1 = 'Tema 1';
 const tema2 = 'Tema 2';
@@ -42,7 +40,7 @@ describe("API Temas", () => {
 		});
 
 		it("Debe devolver un error 404 si no se encuentra el tema", (done) => {						
-			const id  = mongoose.Types.ObjectId();	
+			const id = '5dc426d35f079611244d595t';
 
 			chai.request(server)
 				.get(api + '/' + id)

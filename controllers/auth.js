@@ -16,21 +16,18 @@ exports.login = asyncHandler(async (req, res, next) => {
   const mensaje = 'Email y/o contraseña incorrectos';
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(new ErrorResponse(mensaje, 400));
-  }
+  if (!email || !password) 
+    return next(new ErrorResponse(mensaje, 400));  
   
   const usuario = await Usuario.findOne({ email }).select('+password');
 
-  if (!usuario) {
-  	return next(new ErrorResponse(mensaje, 401));
-  }
+  if (!usuario) 
+  	return next(new ErrorResponse(mensaje, 401));  
 
   const esPasswordCorrecto = await usuario.validarPassword(password);
 
-  if (!esPasswordCorrecto) {
-  	return next(new ErrorResponse(mensaje, 401));
-  }
+  if (!esPasswordCorrecto) 
+  	return next(new ErrorResponse(mensaje, 401));  
 
   const token = usuario.obtenerToken();
 

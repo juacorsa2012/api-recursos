@@ -1,6 +1,10 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+### Commit 8. 11-11-2019
+* Se crea el modelo de enlaces.
+* Se crea el controlador de enlaces y las rutas.
+* Se actualiza server.js
 
 ### Commit 7. 5-11-2019
 * Se instalan los paquetes jsonwebtoken y bcryptjs.

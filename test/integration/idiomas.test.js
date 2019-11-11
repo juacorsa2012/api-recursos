@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { chai, server, should } = require("./config");
 const Idioma  = require('../../models/idioma');
 const idioma1 = 'Idioma 1';
@@ -41,7 +40,7 @@ describe("API Idiomas", () => {
 		});
 
 		it("Debe devolver un error 404 si no se encuentra el recurso", (done) => {						
-			const id  = mongoose.Types.ObjectId();	
+			const id = '5dc426d35f079611244d595t';
 
 			chai.request(server)
 				.get(api + '/' + id)

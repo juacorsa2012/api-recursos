@@ -13,19 +13,13 @@ exports.obtenerTema = asyncHandler(async (req, res, next) => {
 	if (!tema) 
 		return next(new ErrorResponse(`Tema no encontrado con el id ${id}`), 404);
 	  
-	return res.status(200).json({
-		success: true,
-	  	data: tema
-	})
+	return res.status(200).json({ success: true, data: tema })
 });
 
 exports.registrarTema = asyncHandler(async (req, res, next) => {
 	const tema = await Tema.create(req.body);
 
-  	res.status(201).json({
-    	success: true,
-    	data: tema
-  	});
+  	res.status(201).json({ success: true, data: tema });
 });
 
 exports.actualizarTema = asyncHandler(async (req, res, next) => {

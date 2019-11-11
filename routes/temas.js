@@ -15,11 +15,11 @@ const router = express.Router({ mergeParams: true });
 router
   .route('/')
   .get(advancedQuery(Tema, ''), obtenerTemas)
-  .post(protect, isRole('admin'), registrarTema);
+  .post(registrarTema);
 
 router
   .route('/:id')
   .get(obtenerTema)
-  .put(protect, isRole('admin'), actualizarTema);
+  .put(actualizarTema);
 
 module.exports = router;
