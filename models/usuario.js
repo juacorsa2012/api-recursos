@@ -12,8 +12,7 @@ const UsuarioSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El email es un dato requerido'],
     unique: true,
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'El email no es válido']
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'El email no es válido']
   },
   rol: {
     type: String,

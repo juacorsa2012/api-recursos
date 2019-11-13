@@ -10,7 +10,8 @@ const enlaceSchema = new mongoose.Schema(
   url: {
       type: String,
       required: [true, 'La url del enlace es un campo requerido'],      
-      trim: true
+      trim: true,
+      match: [/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/, 'La url no es válida']
     },
   comentario: String, 
   tema: {
@@ -31,3 +32,4 @@ const enlaceSchema = new mongoose.Schema(
 const Enlace = mongoose.model('Enlace', enlaceSchema);
 
 module.exports = Enlace;
+

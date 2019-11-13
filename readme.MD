@@ -1,6 +1,9 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+### Commit 9. 13-11-2019
+* Se crean los tests de enlaces.
+
 ### Commit 8. 11-11-2019
 * Se crea el modelo de enlaces.
 * Se crea el controlador de enlaces y las rutas.
