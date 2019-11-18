@@ -14,7 +14,7 @@ exports.registrarLibro = asyncHandler(async (req, res, next) => {
 
 exports.obtenerLibro = asyncHandler(async (req, res, next) => {
 	const id = req.params.id;
-	const libro = await Libro.findById(id).populate('tema');
+	const libro = await Libro.findById(id).populate('tema idioma editorial');
 
 	if (!libro) 
 		return next(new ErrorResponse(`Libro no encontrado con el id ${id}`), 404);

@@ -1,38 +1,56 @@
 const { chai, server, should } = require("./config");
-const Libro = require('../../models/libro');
-const Tema  = require('../../models/tema');
-const Idioma    = require('../../models/idioma');
-const Editorial = require('../../models/editorial');
+const Tutorial = require('../../models/tutorial');
+const Tema = require('../../models/tema');
+const Idioma = require('../../models/idioma');
+const Fabricante = require('../../models/fabricante');
 const titulo1 = 'Titulo 1';
-const titulo2 = 'Título 2';
 const tema1   = 'Tema 1';
 const idioma1 = 'Idioma 1';
-const editorial1 = 'Editorial 1000';
-const api = '/api/v1/libros';
-const paginas = 600;
+const fabricante1 = "Fabricante 1";
+const api = '/api/v1/tutoriales';
+const duracion  = 600;
 const publicado = 2019;
 const observaciones = 'observaciones 1';
 
+let temaId;
+let fabricanteId;
+let idiomaId;
+let tutorialId;
+
 describe("API Enlaces", () => {
 	beforeEach(async function() {
-	  await Libro.deleteMany({});
+	  await Tutorial.deleteMany({});
 	  await Tema.deleteMany({});
-	  await Editorial.deleteMany({});
+	  await Fabricante.deleteMany({});
 	  await Idioma.deleteMany({});
+
+	  const tema = new Tema({nombre: tema1});
+	  const fabricante = new Fabricante({nombre: fabricante1});
+	  const idioma = new Idioma({nombre: idioma1});
+
+   	  await tema.save();
+	  await fabricante.save();
+	  await	idioma.save();
+
+	  temaId = tema._id;
+	  idiomaId = idioma._id;
+	  fabricanteId = fabricante._id;
+
+	  const tutorial = new Tutorial({
+	  	titulo: titulo1,
+	  	tema: temaId,
+	  	idioma: idiomaId,
+	  	fabricante: fabricanteId,
+	  	duracion,
+	  	publicado
+	  });
+
+	  await tutorial.save();
+	  tutorialId = tutorial._id;
 	});
 
 	describe("/GET", () => {		 
-		it("Debe devolver todos los libros", (done) => {		
-			const tema = new Tema({nombre: tema1});
-			const editorial = new Editorial({nombre: editorial1});
-			const idioma = new Idioma({nombre: idioma1});
-
-			tema.save();
-			editorial.save();
-			idioma.save();
-
-			Libro.create({titulo: titulo1, tema: tema.id, editorial: editorial.id, idioma: idioma.id, publicado: 2019, paginas: 560, observaciones: ''});
-
+		it("Debe devolver todos los tutoriales", (done) => {		
 			chai.request(server)
 				.get(api)
 				.end((err, res) => {
@@ -58,7 +76,7 @@ describe("API Enlaces", () => {
 				});
 		});
 
-		it("Debe devolver un error 404 si no se encuentra el libro", (done) => {						
+		it("Debe devolver un error 404 si no se encuentra el tutorial", (done) => {						
 			const id = '5dc426d35f079611244d595t';
 
 			chai.request(server)
@@ -71,72 +89,39 @@ describe("API Enlaces", () => {
 				});
 		});
 
-		it("Debe devolver un libro", (done) => {	
-			const tema = new Tema({nombre: tema1});
-			const editorial = new Editorial({nombre: editorial1});
-			const idioma = new Idioma({nombre: idioma1});
-
-			tema.save();
-			editorial.save();
-			idioma.save();
-
-			const libro = new Libro({
-				titulo: titulo1, 
-				editorial: editorial.id,
-				idioma: idioma.id,				
-				tema: tema.id,
-				publicado,
-				paginas,
-				observaciones
-			});				
-
-			libro.save();
-
+		it("Debe devolver un tutorial", (done) => {	
 			chai.request(server)
-				.get(api + '/' + libro._id)
+				.get(api + '/' + tutorialId)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.have.property("success").to.be.true;
 					res.body.should.have.property("data");
+					res.body.data.should.have.property('titulo');
+					res.body.data.should.have.property('tema');
+					res.body.data.should.have.property('fabricante');
+					res.body.data.should.have.property('idioma');
+					res.body.data.should.have.property('duracion');
+					res.body.data.should.have.property('publicado');
 					done();
 				});
-		});
+		})
 	});
 
 	describe('/POST', () => {
-		let temaId;
-		let idiomaId;
-		let editorialId;
-
-		beforeEach(async function() {
-		  await Libro.deleteMany({});
-		  await Tema.deleteMany({});
-		  await Editorial.deleteMany({});
-		  await Idioma.deleteMany({});
-
-          const tema = new Tema({nombre: tema1});
-		  const editorial = new Editorial({nombre: editorial1});
-		  const idioma = new Idioma({nombre: idioma1});
-
-		  temaId = await tema.save();
-		  editorialId = await editorial.save();
-		  idiomaId = await idioma.save();
-		});
-
-		it('debería insertar un libro', (done) => {
-			const libro = { 
+		it('debería insertar un tutorial', (done) => {
+			const tutorial = { 
 				titulo: titulo1, 				
 				tema: temaId, 
 				idioma: idiomaId,
-				editorial: editorialId,
+				fabricante: fabricanteId,
 				publicado,
-				paginas,
+				duracion,
 				observaciones
 			};		
-		    
+
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(201);		            
 		            res.body.should.have.property("success").to.be.true;
@@ -144,138 +129,136 @@ describe("API Enlaces", () => {
 		            res.body.data.should.have.property('titulo').eql(titulo1);	
 					res.body.data.should.have.property('tema');
 					res.body.data.should.have.property('idioma');
-					res.body.data.should.have.property('editorial');
+					res.body.data.should.have.property('fabricante');
 					res.body.data.should.have.property('observaciones').eql(observaciones);
 					res.body.data.should.have.property('publicado').eql(publicado);
-					res.body.data.should.have.property('paginas').eql(paginas);
+					res.body.data.should.have.property('duracion').eql(duracion);
 		            res.body.data.should.have.property('_id');
 		            res.body.data.should.have.property('created_at');		            
 		            done();
 		        });
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro sin título', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial sin título', (done) => {
+			const tutorial = { 				
 				tema: temaId,
 				idioma: idiomaId,
-				editorial: editorialId,
+				fabricante: fabricanteId,
 				publicado,
-				paginas,
+				duracion,
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
-		            res.body.should.have.property("error").eql('El título del libro es un dato requerido');
+		            res.body.should.have.property("error").eql('El título del tutorial es un dato requerido');
 		            done();
 		        });
 
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro sin tema', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial sin tema', (done) => {
+			const tutorial = { 				
 				titulo: titulo1,
 				idioma: idiomaId,
-				editorial: editorialId,
+				fabricante: fabricanteId,
 				publicado,
-				paginas,
+				duracion,
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
-		            res.body.should.have.property("error").eql('El tema del libro es un dato requerido');
-		            done();
-		        });
-
-		});
-
-		it('debería devolver un error 400 al intentar registrar un libro sin idioma', (done) => {
-			const libro = { 				
-				titulo: titulo1,
-				tema: temaId,
-				editorial: editorialId,
-				publicado,
-				paginas,
-				observaciones
-			};
-
-		    chai.request(server)
-		    	.post(api)
-		        .send(libro)
-		        .end((err, res) => {
-		        	res.should.have.status(400);		            
-		            res.body.should.have.property("success").to.be.false;
-		            res.body.should.have.property("error").eql('El idioma del libro es un dato requerido');
+		            res.body.should.have.property("error").eql('El tema del tutorial es un dato requerido');
 		            done();
 		        });
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro sin editorial', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial sin idioma', (done) => {
+			const tutorial = { 				
 				titulo: titulo1,
 				tema: temaId,
-				idioma: idiomaId,
+				fabricante: fabricanteId,
 				publicado,
-				paginas,
+				duracion,
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
-		            res.body.should.have.property("error").eql('La editorial del libro es un dato requerido');
+		            res.body.should.have.property("error").eql('El idioma del tutorial es un dato requerido');
 		            done();
 		        });
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro sin año de publicación', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial sin fabricante', (done) => {
+			const tutorial = { 				
 				titulo: titulo1,
 				tema: temaId,
 				idioma: idiomaId,
-				editorial: editorialId,
-				paginas,
+				publicado,
+				duracion,
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
+		        .end((err, res) => {
+		        	res.should.have.status(400);		            
+		            res.body.should.have.property("success").to.be.false;
+		            res.body.should.have.property("error").eql('El fabricante del tutorial es un dato requerido');
+		            done();
+		        });
+		});
+
+		it('debería devolver un error 400 al intentar registrar un tutorial sin año de publicación', (done) => {
+			const tutorial = { 				
+				titulo: titulo1,
+				tema: temaId,
+				idioma: idiomaId,
+				fabricante: fabricanteId,
+				duracion,
+				observaciones
+			};
+
+		    chai.request(server)
+		    	.post(api)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
 		            res.body.should.have.property("error").eql('El año de publicación es un dato requerido');
 		            done();
 		        });
-
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro si el año de publicación es anterior a 2010', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial sin año de publicación', (done) => {
+			const tutorial = { 				
 				titulo: titulo1,
 				tema: temaId,
 				idioma: idiomaId,
-				editorial: editorialId,
+				fabricante: fabricanteId,
+				duracion,
 				publicado: 2009,
-				paginas,
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
@@ -284,84 +267,54 @@ describe("API Enlaces", () => {
 		        });
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro sin páginas', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial sin duracion', (done) => {
+			const tutorial = { 				
 				titulo: titulo1,
 				tema: temaId,
 				idioma: idiomaId,
-				editorial: editorialId,
-				publicado,
+				fabricante: fabricanteId,	
+				publicado,			
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
-		            res.body.should.have.property("error").eql('El número de páginas es un dato requerido');
+		            res.body.should.have.property("error").eql('La duración del tutorial es un dato requerido');
 		            done();
 		        });
 		});
 
-		it('debería devolver un error 400 al intentar registrar un libro con páginas inferior a 1', (done) => {
-			const libro = { 				
+		it('debería devolver un error 400 al intentar registrar un tutorial con una duracion inferior a 1 minuto', (done) => {
+			const tutorial = { 				
 				titulo: titulo1,
 				tema: temaId,
 				idioma: idiomaId,
-				editorial: editorialId,
+				fabricante: fabricanteId,				
+				duracion: 0,
 				publicado,
-				paginas: 0,
 				observaciones
 			};
 
 		    chai.request(server)
 		    	.post(api)
-		        .send(libro)
+		        .send(tutorial)
 		        .end((err, res) => {
 		        	res.should.have.status(400);		            
 		            res.body.should.have.property("success").to.be.false;
-		            res.body.should.have.property("error").eql('El número de páginas debe ser como mínimo de uno');
+		            res.body.should.have.property("error").eql('La duración debe ser como mínimo de un minuto');
 		            done();
 		        });
 		});
 	});
 
 	describe("/DELETE/:id ", () => {
-		let libroId;
-
-		beforeEach(async function() {
-		  await Libro.deleteMany({});
-		  await Tema.deleteMany({});
-		  await Editorial.deleteMany({});
-		  await Idioma.deleteMany({});
-
-          const tema = new Tema({nombre: tema1});
-		  const editorial = new Editorial({nombre: editorial1});
-		  const idioma = new Idioma({nombre: idioma1});
-
-		  const temaId = await tema.save();
-		  const editorialId = await editorial.save();
-		  const idiomaId = await idioma.save();
-
-		  let libro = new Libro({
-		  	titulo: titulo1,
-		  	tema: temaId,
-		  	editorial: editorialId,
-		  	idioma: idiomaId,
-		  	publicado,
-		  	paginas,
-		  	observaciones
-		  });
-
-		  libro = await libro.save();		  
-		  libroId = libro._id;
-		});
-
-		it('debería borrar un libro', (done) => {	    
+		it('debería borrar un tutorial', (done) => {	    
 		    chai.request(server)
-		    	.delete(api + '/' + libroId)		        
+		    	.delete(api + '/' + tutorialId)		        
 		        .end((err, res) => {		        	
 		        	res.should.have.status(200);		            
 		            res.body.should.have.property('success').to.be.true;		            
@@ -370,7 +323,7 @@ describe("API Enlaces", () => {
 		        });
 		});
 
-		it('debería dar un error 404 si intentamos borrar un libro que no existe', (done) => {	    
+		it('debería dar un error 404 si intentamos borrar un tutorial que no existe', (done) => {	    
 		    chai.request(server)
 		    	.delete(api + '/1')		        
 		        .end((err, res) => {		        	
@@ -380,4 +333,4 @@ describe("API Enlaces", () => {
 		        });
 		});
 	});
-});
+})

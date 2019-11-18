@@ -31,12 +31,14 @@ const tutorialSchema = new mongoose.Schema(
 
   duracion: {
     type: Number,
-    required: [true, 'La duración del tutorial es un dato requerido']
+    required: [true, 'La duración del tutorial es un dato requerido'],
+    min: [1, 'La duración debe ser como mínimo de un minuto']
   },
 
   publicado: {
     type: Number,
-    required: [true, 'El año de publicación es un dato requerido']
+    required: [true, 'El año de publicación es un dato requerido'],
+    min: [2010, 'El año de publicación no puede ser anterior a 2010']
   },
 
   created_at: {

@@ -1,8 +1,14 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+### Commit 12. 18-11-2019
+* Se crean las rutas y los controladores de tutoriales.
+* Se crean los test de tutoriales.
+
 ### Commit 11. 18-11-2019
 * Se crean los test de libros.
+* Se crean las rutas y los controladores de tutoriales.
+* Se crean los test de tutoriales.
 
 ### Commit 10. 14-11-2019
 * Se crean los modelos de libros y turoriales.
