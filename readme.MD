@@ -1,6 +1,13 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+### Commit 11. 18-11-2019
+* Se crean los test de libros.
+
+### Commit 10. 14-11-2019
+* Se crean los modelos de libros y turoriales.
+* Se crea el controlador de libros y las rutas de libros.
+
 ### Commit 9. 13-11-2019
 * Se crean los tests de enlaces.
 

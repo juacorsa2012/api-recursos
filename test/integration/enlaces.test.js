@@ -7,23 +7,14 @@ const tema1   = 'Tema 1';
 const urlGoogle = 'https://www.google.com';
 const urlAmazon = 'https://www.amazon.es';
 const urlNoValida = 'http://';
-
 const api = '/api/v1/enlaces';
 
 describe("API Enlaces", () => {
-	beforeEach((done) => { 
-		Enlace.deleteMany({}, (err) => { 
-			done();           
-		});        
+	beforeEach(async function() {
+	  await Enlace.deleteMany({});
+	  await Tema.deleteMany({});  
 	});
-
-	beforeEach((done) => { 
-		Tema.deleteMany({}, (err) => { 
-			done();           
-		});        
-	});
-
-
+	
 	describe("/GET", () => {		 
 		it("Debe devolver todos los enlaces", (done) => {		
 			const tema = new Tema({nombre: 'tema 1'});
@@ -37,7 +28,9 @@ describe("API Enlaces", () => {
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.have.property("success").to.be.true;
-					res.body.should.have.property("data");									
+					res.body.should.have.property("data");	
+					res.body.should.have.property("count");	
+					res.body.should.have.property("pagination");						
 					done();
 				});
 		});
@@ -63,7 +56,7 @@ describe("API Enlaces", () => {
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.have.property("success").to.be.false;
-					res.body.should.have.property("error");
+					res.body.should.have.property("error").eql("Recurso no encontrado");
 					done();
 				});
 		});
@@ -87,7 +80,7 @@ describe("API Enlaces", () => {
 
 	describe('/POST', () => {
 		it('debería insertar un enlace', (done) => {
-			const tema = new Tema({nombre: 'tema 1'});
+			const tema = new Tema({nombre: tema1});
 			tema.save();								
 			const enlace = { titulo: titulo1, url: urlAmazon, tema: tema.id, comentario: '' };
 		    
@@ -107,7 +100,7 @@ describe("API Enlaces", () => {
 		});
 
 		it('debería devolver un error 400 al registrar un enlace sin título ', (done) => {
-			const tema = new Tema({nombre: 'tema 1'});
+			const tema = new Tema({nombre: tema1});
 			tema.save();								
 			const enlace = { url: urlAmazon, tema: tema.id, comentario: '' };			
 		    
@@ -123,7 +116,7 @@ describe("API Enlaces", () => {
 		});
 
 		it('debería devolver un error 400 al registrar un enlace sin url ', (done) => {
-			const tema = new Tema({nombre: 'tema 1'});
+			const tema = new Tema({nombre: tema1});
 			tema.save();								
 			const enlace = { titulo: titulo1, tema: tema.id, comentario: '' };			
 		    
@@ -153,7 +146,7 @@ describe("API Enlaces", () => {
 		});
 
 		it('debería devolver un error 400 al registrar un enlace con una url no válida ', (done) => {
-			const tema = new Tema({nombre: 'tema 1'});
+			const tema = new Tema({nombre: tema1});
 			tema.save();								
 
 			const enlace = { titulo: titulo1, url: urlNoValida, tema: tema.id, comentario: '' };			
@@ -171,7 +164,7 @@ describe("API Enlaces", () => {
 
 	describe('/PUT/:id', () => {
 		it('debería actualizar un enlace', (done) => {
-			const tema = new Tema({nombre: 'Tema 1'});
+			const tema = new Tema({nombre: tema1});
 			tema.save();						
 		    
 		    const enlace = new Enlace({titulo: titulo1, url: urlAmazon, tema: tema.id, comentario: ''});		    

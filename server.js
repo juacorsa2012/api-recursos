@@ -10,6 +10,7 @@ const idiomas = require('./routes/idiomas');
 const editoriales = require('./routes/editoriales');
 const fabricantes = require('./routes/fabricantes');
 const enlaces = require('./routes/enlaces');
+const libros = require('./routes/libros');
 const auth = require('./routes/auth');
 
 db();
@@ -27,6 +28,7 @@ app.use('/api/v1/editoriales', editoriales);
 app.use('/api/v1/idiomas', idiomas);
 app.use('/api/v1/fabricantes', fabricantes);
 app.use('/api/v1/enlaces', enlaces);
+app.use('/api/v1/libros', libros);
 app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);
