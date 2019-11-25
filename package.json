@@ -6,7 +6,13 @@
   "scripts": {
     "start": "SET NODE_ENV=production & node server",
     "dev": "SET NODE_ENV=development & nodemon server",
-    "test": "SET NODE_ENV=development & mocha --recursive --timeout 5000 --reporter min --exit "
+    "test": "SET NODE_ENV=development & mocha --recursive --timeout 5000 --reporter min --exit ",
+    "seederEnlaces:dev": "SET NODE_ENV=development & node ./seeds/seederEnlaces.js",
+    "seederEnlaces:prod": "SET NODE_ENV=production & node ./seeds/seederEnlaces.js",
+    "seederLibros:dev": "SET NODE_ENV=development & node ./seeds/seederLibros.js",
+    "seederLibros:prod": "SET NODE_ENV=production & node ./seeds/seederLibros.js",
+    "seederTutoriales:dev": "SET NODE_ENV=development & node ./seeds/seederTutoriales.js",
+    "seederTutoriales:prod": "SET NODE_ENV=production & node ./seeds/seederTutoriales.js"
   },
   "keywords": [],
   "author": "",
@@ -17,9 +23,11 @@
     "cors": "^2.8.5",
     "custom-env": "^1.0.2",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.7",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "random-year": "^1.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

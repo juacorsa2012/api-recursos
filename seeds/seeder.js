@@ -1,14 +1,9 @@
-const dotenv = require('dotenv');
 const fs = require('fs');
 const mongoose = require('mongoose');
-
 const Tema = require('.././models/tema');
 const Editorial = require('.././models/editorial');
 const Idioma = require('.././models/idioma');
 const Fabricante = require('.././models/fabricante');
-
-dotenv.config({ path: '../config/.env' });
-
 
 const MONGO_URI = process.env.MONGO_URI_LOCAL;
 

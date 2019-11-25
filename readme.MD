@@ -1,6 +1,9 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
 
+### Commit 13. 25-11-2019
+* Se crean los seeders de enlaces, libros y tutoriales.
+
 ### Commit 12. 18-11-2019
 * Se crean las rutas y los controladores de tutoriales.
 * Se crean los test de tutoriales.

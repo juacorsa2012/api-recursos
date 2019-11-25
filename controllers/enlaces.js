@@ -41,7 +41,7 @@ exports.borrarEnlace = asyncHandler(async (req, res, next) => {
   	if (!enlace) 
     	return next(new ErrorResponse(`Enlace no encontrado con el id ${id}`), 404);
   
- 	await Enlace.remove();
+ 	await enlace.remove();
 
    	res.status(200).json({ success: true, data: {} });	 
 });
