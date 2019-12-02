@@ -1,5 +1,9 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
+### Commit 14. 02-12-2019
+* Se crean las rutas de stats/count y stats/tema.
+* Se crean las rutas de stats/idioma, stats/publicado y stats/editorial.
+* Se crean las rutas de stats/tema/publicado y stats/editorial/publicado.
 
 ### Commit 13. 25-11-2019
 * Se crean los seeders de enlaces, libros y tutoriales.
@@ -72,3 +76,45 @@
 * Se crea la estructura inicial del proyecto.
 * Se crean las carpetas routes, controllers, models, config, test, seeds, utils y middleware.
 * Se instala express y mongoose.
+
+
+
+
+
+
+db.libros.aggregate([   
+    {
+      $lookup: {
+        from: "temas",
+        localField: "tema",
+        foreignField: "_id",
+        as: "tema"
+    }},  
+
+    { $unwind: "$tema" },  
+    
+    
+    { $group : { _id : { tema: "$tema.nombre" }, total : { $sum : 1 } } },
+  
+    { $sort : { total : -1 } }    
+    
+])
+
+
+db.libros.aggregate([   
+    {
+      $lookup: {
+        from: "temas",
+        localField: "tema",
+        foreignField: "_id",
+        as: "tema"
+    }},  
+
+    { $unwind: "$tema" },     
+    { $group : { _id : { tema: "$tema.nombre", publicado: "$publicado" }, total : { $sum : 1 } } },
+  
+    { $sort : { total : -1 } }    
+    
+])
+
+

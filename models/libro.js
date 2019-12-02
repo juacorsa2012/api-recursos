@@ -50,6 +50,91 @@ const libroSchema = new mongoose.Schema(
   collection: 'libros',
 });
 
+libroSchema.statics.obtenerLibrosPorTema = function() {
+  return this.aggregate([
+  {
+    $lookup: {
+        from: "temas",
+        localField: "tema",
+        foreignField: "_id",
+        as: "tema"
+    }},  
+    { $unwind: "$tema" },     
+    { $group : { _id : "$tema.nombre", total : { $sum : 1 } } },
+    { $sort : { total : -1 } }
+  ])
+}
+
+libroSchema.statics.obtenerLibrosPorPublicado = function() {
+  return this.aggregate([  
+    { $group : { _id :  "$publicado", total : { $sum : 1 } } },  
+    { $sort : { total : -1 } }    
+  ])
+}
+
+libroSchema.statics.obtenerLibrosPorEditorial = function() {
+  return this.aggregate([
+  {
+    $lookup: {
+        from: "editoriales",
+        localField: "editorial",
+        foreignField: "_id",
+        as: "editorial"
+    }},  
+    { $unwind: "$editorial" },     
+    { $group : { _id : "$editorial.nombre", total : { $sum : 1 } } },
+    { $sort : { total : -1 } }
+  ])
+}
+
+libroSchema.statics.obtenerLibrosPorIdioma = function() {
+  return this.aggregate([
+  {
+    $lookup: {
+        from: "idiomas",
+        localField: "idioma",
+        foreignField: "_id",
+        as: "idioma"
+    }},  
+    { $unwind: "$idioma" },     
+    { $group : { _id : "$idioma.nombre", total : { $sum : 1 } } },
+    { $sort : { total : -1 } }
+  ])
+}
+
+libroSchema.statics.obtenerLibrosPorTemaPublicado = function() {
+  return this.aggregate([
+  {
+    $lookup: {
+        from: "temas",
+        localField: "tema",
+        foreignField: "_id",
+        as: "tema"
+    }},  
+    { $unwind: "$tema" },     
+    { $group : { _id : { tema: "$tema.nombre", publicado: "$publicado" }, total : { $sum : 1 } } },  
+    { $sort : { total : -1 } }
+  ])
+}
+
+libroSchema.statics.obtenerLibrosPorEditorialPublicado = function() {
+  return this.aggregate([
+  {
+    $lookup: {
+        from: "editoriales",
+        localField: "editorial",
+        foreignField: "_id",
+        as: "editorial"
+    }},  
+    { $unwind: "$editorial" },     
+    { $group : { _id : {editorial: "$editorial.nombre", publicado: "$publicado" }, total : { $sum : 1 } } },  
+    { $sort : { total : -1 } }
+  ])
+}
+
+
+
+
 const Libro = mongoose.model('Libro', libroSchema);
 
 module.exports = Libro;
