@@ -52,38 +52,58 @@ const libroSchema = new mongoose.Schema(
 
 libroSchema.statics.obtenerLibrosPorTema = function() {
   return this.aggregate([
-  {
-    $lookup: {
-        from: "temas",
-        localField: "tema",
-        foreignField: "_id",
-        as: "tema"
-    }},  
-    { $unwind: "$tema" },     
-    { $group : { _id : "$tema.nombre", total : { $sum : 1 } } },
-    { $sort : { total : -1 } }
+    {
+      $lookup: {
+          from: "temas",
+          localField: "tema",
+          foreignField: "_id",
+          as: "tema"
+      }
+    },  
+    {"$unwind" : "$tema" },    
+    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    {"$unwind" : "$data" },        
+    {"$group" : {"_id": "$data.tema.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort : { count : -1 } },    
+    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
 libroSchema.statics.obtenerLibrosPorPublicado = function() {
-  return this.aggregate([  
-    { $group : { _id :  "$publicado", total : { $sum : 1 } } },  
-    { $sort : { total : -1 } }    
+  return this.aggregate([
+    {
+      $lookup: {
+          from: "temas",
+          localField: "tema",
+          foreignField: "_id",
+          as: "tema"
+      }
+    },  
+    { "$unwind" : "$tema" },    
+    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    {"$unwind" : "$data" },        
+    {"$group" : {"_id": "$data.publicado", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort : { count : -1 } },    
+    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
 libroSchema.statics.obtenerLibrosPorEditorial = function() {
   return this.aggregate([
-  {
-    $lookup: {
-        from: "editoriales",
-        localField: "editorial",
-        foreignField: "_id",
-        as: "editorial"
-    }},  
-    { $unwind: "$editorial" },     
-    { $group : { _id : "$editorial.nombre", total : { $sum : 1 } } },
-    { $sort : { total : -1 } }
+    {
+      $lookup: {
+          from: "editoriales",
+          localField: "editorial",
+          foreignField: "_id",
+          as: "editorial"
+      }
+    },  
+    {"$unwind" : "$editorial" },    
+    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    {"$unwind" : "$data" },        
+    {"$group" : {"_id": "$data.editorial.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort : { count : -1 } },    
+    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
@@ -96,46 +116,51 @@ libroSchema.statics.obtenerLibrosPorIdioma = function() {
         foreignField: "_id",
         as: "idioma"
     }},  
-    { $unwind: "$idioma" },     
-    { $group : { _id : "$idioma.nombre", total : { $sum : 1 } } },
-    { $sort : { total : -1 } }
+    { $unwind  : "$idioma" },    
+    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $unwind  : "$data" },        
+    { $group   : {"_id": "$data.idioma.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort    : { count : -1 } },    
+    { $project : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
 libroSchema.statics.obtenerLibrosPorTemaPublicado = function() {
   return this.aggregate([
-  {
-    $lookup: {
+    {    
+      $lookup: {
         from: "temas",
         localField: "tema",
         foreignField: "_id",
         as: "tema"
-    }},  
-    { $unwind: "$tema" },     
-    { $group : { _id : { tema: "$tema.nombre", publicado: "$publicado" }, total : { $sum : 1 } } },  
-    { $sort : { total : -1 } }
+    }},      
+    { $unwind  : "$tema" },    
+    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $unwind  : "$data"},        
+    { $group   : {"_id": { tema : "$data.tema.nombre", publicado : "$data.publicado" }, "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort    : { count : -1 } },    
+    { $project : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}      
   ])
 }
 
 libroSchema.statics.obtenerLibrosPorEditorialPublicado = function() {
   return this.aggregate([
-  {
-    $lookup: {
+    {    
+      $lookup: {
         from: "editoriales",
         localField: "editorial",
         foreignField: "_id",
         as: "editorial"
-    }},  
-    { $unwind: "$editorial" },     
-    { $group : { _id : {editorial: "$editorial.nombre", publicado: "$publicado" }, total : { $sum : 1 } } },  
-    { $sort : { total : -1 } }
+    }},      
+    { $unwind  : "$editorial" },    
+    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $unwind  : "$data"},        
+    { $group   : {"_id": { editorial : "$data.editorial.nombre", publicado : "$data.publicado" }, "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort    : { count : -1 } },    
+    { $project : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}      
   ])
 }
-
-
-
 
 const Libro = mongoose.model('Libro', libroSchema);
 
 module.exports = Libro;
-

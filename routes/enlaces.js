@@ -4,9 +4,9 @@ const {
 	actualizarEnlace,
 	borrarEnlace,
 	contarEnlaces,
-	contarEnlacesPorTema,
 	obtenerEnlaces,
-	obtenerEnlace
+	obtenerEnlace,
+	obtenerEnlacesPorTemas
 	} = require('../controllers/enlaces');
 
 const Enlace = require('../models/enlace');
@@ -15,8 +15,8 @@ const { protect, isRole } = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/count', contarEnlaces);
-router.get('/count/:id', contarEnlacesPorTema);
+router.get('/stats/count', contarEnlaces);
+router.get('/stats/temas', obtenerEnlacesPorTemas);
 
 router
   .route('/')

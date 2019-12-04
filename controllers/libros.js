@@ -54,89 +54,49 @@ exports.contarLibros = asyncHandler(async (req, res, next) => {
 
 exports.obtenerLibrosPorTema = async (req, res, next) => {
 	const documents = await Libro.countDocuments();
-	const aggregate = await Libro.obtenerLibrosPorTema();
-
-	data = [];
-
-	aggregate.forEach((element, index, array) => {    	
-    	data.push({
-    		"tema" : element._id, 
-    		"total": element.total, 
-    		"peso" : ((element.total/documents)*100).toFixed(2) })    
-	});	
+	const data = await Libro.obtenerLibrosPorTema();
 
   	res.status(200).json({ success: true, count: documents, data });
 };
 
 exports.obtenerLibrosPorPublicado = async (req, res, next) => {
 	const documents = await Libro.countDocuments();
-	const aggregate = await Libro.obtenerLibrosPorPublicado();
-
-	data = [];
-
-	aggregate.forEach((element, index, array) => {    	
-    	data.push({
-    		"publicado" : element._id, 
-    		"total": element.total, 
-    		"peso" : ((element.total/documents)*100).toFixed(2) })    
-	});	
+	const data = await Libro.obtenerLibrosPorPublicado();
 
   	res.status(200).json({ success: true, count: documents, data });
 };
 
 exports.obtenerLibrosPorEditorial = async (req, res, next) => {
 	const documents = await Libro.countDocuments();
-	const aggregate = await Libro.obtenerLibrosPorEditorial();
-
-	data = [];
-
-	aggregate.forEach((element, index, array) => {    	
-    	data.push({
-    		"editorial" : element._id, 
-    		"total": element.total, 
-    		"peso" : ((element.total/documents)*100).toFixed(2) })    
-	});	
+	const data = await Libro.obtenerLibrosPorEditorial();
 
   	res.status(200).json({ success: true, count: documents, data });
 };
 
 exports.obtenerLibrosPorIdioma = async (req, res, next) => {
 	const documents = await Libro.countDocuments();
-	const aggregate = await Libro.obtenerLibrosPorIdioma();
-
-	data = [];
-
-	aggregate.forEach((element, index, array) => {    	
-    	data.push({
-    		"idioma" : element._id, 
-    		"total": element.total, 
-    		"peso" : ((element.total/documents)*100).toFixed(2) })    
-	});	
+	const data = await Libro.obtenerLibrosPorIdioma();
 
   	res.status(200).json({ success: true, count: documents, data });
 };
 
 exports.obtenerLibrosPorTemaPublicado = async (req, res, next) => {
 	const documents = await Libro.countDocuments();
-	const aggregate = await Libro.obtenerLibrosPorTemaPublicado();
-
-	data = [];	
-	
-	aggregate.forEach((element, index, array) => {    	
-    	data.push({
-    		"tema" : element._id.tema, 
-    		"publicado" : element._id.publicado, 
-    		"total": element.total, 
-    		"peso" : ((element.total/documents)*100).toFixed(2) })    
-	});	
+	const data = await Libro.obtenerLibrosPorTemaPublicado();
 
   	res.status(200).json({ success: true, count: documents, data });
 };
 
 exports.obtenerLibrosPorEditorialPublicado = async (req, res, next) => {
 	const documents = await Libro.countDocuments();
-	const aggregate = await Libro.obtenerLibrosPorEditorialPublicado();
+	const data = await Libro.obtenerLibrosPorEditorialPublicado();
 
+  	res.status(200).json({ success: true, count: documents, data });
+};
+
+
+
+	/*
 	data = [];	
 	
 	aggregate.forEach((element, index, array) => {    	
@@ -145,9 +105,4 @@ exports.obtenerLibrosPorEditorialPublicado = async (req, res, next) => {
     		"publicado" : element._id.publicado, 
     		"total": element.total, 
     		"peso" : ((element.total/documents)*100).toFixed(2) })    
-	});	
-
-  	res.status(200).json({ success: true, count: documents, data });
-};
-
-
+	});	*/

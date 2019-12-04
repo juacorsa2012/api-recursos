@@ -3,7 +3,6 @@ const config = require('config');
 const faker  = require('faker');
 const Tema   = require('.././models/tema');
 const Enlace = require('.././models/enlace');
-
 const MONGO_URI = config.get('mongo_uri');
 const nTemas = 20;
 const nEnlaces = 1000;

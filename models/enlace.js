@@ -29,7 +29,30 @@ const enlaceSchema = new mongoose.Schema(
   collection: 'enlaces',
 });
 
+enlaceSchema.statics.obtenerEnlacesPorTema = function() {
+  return this.aggregate([
+    {
+      $lookup: {
+          from: "temas",
+          localField: "tema",
+          foreignField: "_id",
+          as: "tema"
+      }},  
+
+    { "$unwind" : "$tema" },
+    
+    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},    
+   
+    {"$unwind" : "$data" },    
+    
+    {"$group" : {"_id": "$data.tema.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+
+    { $sort : { count : -1 } },
+    
+    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
+  ])
+}
+
 const Enlace = mongoose.model('Enlace', enlaceSchema);
 
 module.exports = Enlace;
-

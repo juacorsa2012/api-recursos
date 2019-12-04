@@ -1,5 +1,11 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
+### Commit 16. 04-12-2019
+* Se modifican los métodos estáticos de libros, ahora el aggregado es directo.
+
+### Commit 15. 03-12-2019
+* Se crean las rutas de stats/count y stats/temas de enlaces.
+
 ### Commit 14. 02-12-2019
 * Se crean las rutas de stats/count y stats/tema.
 * Se crean las rutas de stats/idioma, stats/publicado y stats/editorial.
@@ -118,3 +124,24 @@ db.libros.aggregate([
 ])
 
 
+db.enlaces.aggregate(
+    {    
+    $lookup: {
+        from: "temas",
+        localField: "tema",
+        foreignField: "_id",
+        as: "tema"
+    }},  
+    
+    { "$unwind": "$tema" },
+    
+    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},    
+   
+    {"$unwind":"$data"},    
+    
+    {"$group":{"_id": "$data.tema.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+
+    { $sort : { count : -1 } },
+    
+    {"$project":{ "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}      
+) 

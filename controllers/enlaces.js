@@ -49,13 +49,12 @@ exports.borrarEnlace = asyncHandler(async (req, res, next) => {
 exports.contarEnlaces = asyncHandler(async (req, res, next) => {
 	const documents = await Enlace.countDocuments();
 
-  	res.status(201).json({ success: true, data: documents });
+  	res.status(200).json({ success: true, count: documents });
 });
 
-exports.contarEnlacesPorTema = asyncHandler(async (req, res, next) => {
-	const documents = await Enlace.countDocuments({tema: req.params.id});
+exports.obtenerEnlacesPorTemas = async (req, res, next) => {
+	const documents = await Enlace.countDocuments();
+	const data = await Enlace.obtenerEnlacesPorTema();
 
-  	res.status(201).json({ success: true, data: documents });
-});
-
-
+  	res.status(200).json({ success: true, count: documents, data });
+};
