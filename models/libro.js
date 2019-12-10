@@ -60,31 +60,22 @@ libroSchema.statics.obtenerLibrosPorTema = function() {
           as: "tema"
       }
     },  
-    {"$unwind" : "$tema" },    
-    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
-    {"$unwind" : "$data" },        
-    {"$group" : {"_id": "$data.tema.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
-    { $sort : { count : -1 } },    
-    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
+    { $unwind  : "$tema" },    
+    { $group   : { "_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $unwind  : "$data" },        
+    { $group   : { "_id": "$data.tema.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort    : { count : -1 } },    
+    { $project : { count : 1, peso : {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
 libroSchema.statics.obtenerLibrosPorPublicado = function() {
   return this.aggregate([
-    {
-      $lookup: {
-          from: "temas",
-          localField: "tema",
-          foreignField: "_id",
-          as: "tema"
-      }
-    },  
-    { "$unwind" : "$tema" },    
-    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
-    {"$unwind" : "$data" },        
-    {"$group" : {"_id": "$data.publicado", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
-    { $sort : { count : -1 } },    
-    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
+    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $unwind  : "$data" },        
+    { $group   : {"_id": "$data.publicado", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort    : { count : -1 } },    
+    { $project : { _id : 0, publicado : "$_id", count : 1, peso : {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
@@ -98,12 +89,12 @@ libroSchema.statics.obtenerLibrosPorEditorial = function() {
           as: "editorial"
       }
     },  
-    {"$unwind" : "$editorial" },    
-    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
-    {"$unwind" : "$data" },        
-    {"$group" : {"_id": "$data.editorial.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
-    { $sort : { count : -1 } },    
-    {"$project" : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
+    { $unwind  : "$editorial" },    
+    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $unwind  : "$data" },        
+    { $group   : {"_id": "$data.editorial.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $sort    : { count : -1 } },    
+    { $project : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
 }
 
@@ -117,9 +108,9 @@ libroSchema.statics.obtenerLibrosPorIdioma = function() {
         as: "idioma"
     }},  
     { $unwind  : "$idioma" },    
-    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $group   : {"_id" : null, "count" : { "$sum" : 1 }, "data" : { "$push":"$$ROOT"}}},       
     { $unwind  : "$data" },        
-    { $group   : {"_id": "$data.idioma.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
+    { $group   : {"_id": "$data.idioma.nombre", "count" : { "$sum" : 1 }, "total":{"$first":"$count"}}},
     { $sort    : { count : -1 } },    
     { $project : { "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}    
   ])
@@ -135,7 +126,7 @@ libroSchema.statics.obtenerLibrosPorTemaPublicado = function() {
         as: "tema"
     }},      
     { $unwind  : "$tema" },    
-    { $group   : {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},       
+    { $group   : {"_id" : null, "count" : { "$sum" : 1 }, "data" : { "$push":"$$ROOT"}}},       
     { $unwind  : "$data"},        
     { $group   : {"_id": { tema : "$data.tema.nombre", publicado : "$data.publicado" }, "count" : {"$sum":1}, "total":{"$first":"$count"}}},
     { $sort    : { count : -1 } },    

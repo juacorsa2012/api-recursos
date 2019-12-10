@@ -46,4 +46,95 @@ exports.borrarTutorial = asyncHandler(async (req, res, next) => {
    	res.status(200).json({ success: true, data: {} });	 
 });
 
+exports.obtenerTutorialesPorTema = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const aggregate = await Tutorial.obtenerTutorialesPorTema();
+	const totalMinutes = duration[0].duracion;	
+
+	const data = [];
+	
+	aggregate.forEach((element) => {   
+		const peso = documents == 0 ? 0 : (element.count / documents) * 100
+    	const item = {
+    		tema : element.tema,
+    		duracion : element.duracion,
+    		peso,
+    		temas: element.count
+    	}
+
+    	data.push(item);    
+	});
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};
+
+exports.obtenerTutorialesPorPublicado = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const aggregate = await Tutorial.obtenerTutorialesPorPublicado();	
+	const totalMinutes = duration[0].duracion;	
+
+	const data = [];
+	
+	aggregate.forEach((element) => {   
+		const peso = documents == 0 ? 0 : (element.count / documents) * 100
+    	const item = {
+    		publicado : element.publicado,
+    		duracion : element.duracion,
+    		peso,
+    		publicados: element.count
+    	}
+
+    	data.push(item);    
+	});
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};
+
+exports.obtenerTutorialesPorIdioma = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const aggregate = await Tutorial.obtenerTutorialesPorIdioma();
+	const totalMinutes = duration[0].duracion;	
+
+	const data = [];
+	
+	aggregate.forEach((element) => {   
+		const peso = documents == 0 ? 0 : (element.count / documents) * 100
+    	const item = {
+    		idioma : element.idioma,
+    		duracion : element.duracion,
+    		peso,
+    		idiomas: element.count
+    	}
+
+    	data.push(item);    
+	});
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};
+
+exports.obtenerTutorialesPorFabricante = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const aggregate = await Tutorial.obtenerTutorialesPorFabricante();
+	const totalMinutes = duration[0].duracion;	
+
+	const data = [];
+	
+	aggregate.forEach((element) => {   
+		const peso = documents == 0 ? 0 : (element.count / documents) * 100
+    	const item = {
+    		fabricante : element.fabricante,
+    		duracion : element.duracion,
+    		peso,
+    		fabricantes: element.count
+    	}
+
+    	data.push(item);    
+	});
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};
 

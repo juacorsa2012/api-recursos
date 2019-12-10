@@ -1,5 +1,8 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
+### Commit 17. 10-12-2019
+* Se modifican los métodos estáticos de tutoriales.
+
 ### Commit 16. 04-12-2019
 * Se modifican los métodos estáticos de libros, ahora el aggregado es directo.
 
@@ -145,3 +148,20 @@ db.enlaces.aggregate(
     
     {"$project":{ "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}      
 ) 
+
+
+9-12-19
+
+db.tutoriales.aggregate([
+    { $lookup  : { from: "temas", localField: "tema", foreignField: "_id", as: "tema" } },  
+   
+    { $unwind  : "$tema" },    
+
+    { $group   : { "_id" : "$tema", "duracion" : { "$sum" : "$duracion" }, "count" : { "$sum" : 1 }, "data" : { "$push":"$$ROOT"} }},
+
+    { $unwind  : "$data" },      
+
+    { $sort    : { count : -1 } }, 
+   
+    { $project : { _id : 0, tema : "$data.tema.nombre", duracion : 1, count : 1 } }
+  ])
