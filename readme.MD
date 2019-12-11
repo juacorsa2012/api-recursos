@@ -1,5 +1,8 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
+### Commit 18. 11-12-2019
+* Se desarrolla los métodos estáticos obtenerTutorialesPorTemaPublicado, obtenerTutorialesPorTemaFabricante y obtenerTutorialesPorTemaIdioma.
+
 ### Commit 17. 10-12-2019
 * Se modifican los métodos estáticos de tutoriales.
 

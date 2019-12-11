@@ -96,10 +96,39 @@ tutorialSchema.statics.obtenerTutorialesPorFabricante = function() {
   ])
 }
 
+tutorialSchema.statics.obtenerTutorialesPorTemaPublicado = function() {
+  return this.aggregate([
+    { $lookup  : { from: "temas", localField: "tema", foreignField: "_id", as: "tema" } },  
+    { $unwind  : "$tema" },    
+    { $group   : { "_id" : { tema: "$tema", publicado: "$publicado" }, "duracion" : { "$sum" : "$duracion" }, "count" : { "$sum" : 1 }}},
+    { $sort    : { count : -1 } },   
+    { $project : { _id : 0, tema : "$_id.tema.nombre", publicado : "$_id.publicado", duracion : 1, count : 1 } }
+  ])
+}
 
+tutorialSchema.statics.obtenerTutorialesPorTemaFabricante = function() {
+  return this.aggregate([
+    { $lookup  : { from: "temas", localField: "tema", foreignField: "_id", as: "tema" } },  
+    { $unwind  : "$tema" },           
+    { $lookup  : { from: "fabricantes", localField: "fabricante", foreignField: "_id", as: "fabricante" } },  
+    { $unwind  : "$fabricante" },          
+    { $group   : { "_id" : {tema: "$tema", fabricante: "$fabricante"}, "duracion" : { "$sum" : "$duracion" }, "count" : { "$sum" : 1 }}},        
+    { $sort    : { count : -1 } },      
+    { $project : { _id : 0, tema : "$_id.tema.nombre", fabricante : "$_id.fabricante.nombre", duracion : 1, count : 1 } }
+  ])
+}
 
-
-
+tutorialSchema.statics.obtenerTutorialesPorTemaIdioma = function() {
+  return this.aggregate([
+    { $lookup  : { from: "temas", localField: "tema", foreignField: "_id", as: "tema" } },  
+    { $unwind  : "$tema" },           
+    { $lookup  : { from: "idiomas", localField: "idioma", foreignField: "_id", as: "idioma" } },  
+    { $unwind  : "$idioma" },          
+    { $group   : { "_id" : {tema: "$tema", idioma: "$idioma"}, "duracion" : { "$sum" : "$duracion" }, "count" : { "$sum" : 1 }}},        
+    { $sort    : { count : -1 } },      
+    { $project : { _id : 0, tema : "$_id.tema.nombre", idioma : "$_id.idioma.nombre", duracion : 1, count : 1 } }
+  ])
+}
 
 const Tutorial = mongoose.model('Tutorial', tutorialSchema);
 

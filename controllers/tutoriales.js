@@ -138,3 +138,29 @@ exports.obtenerTutorialesPorFabricante = async (req, res, next) => {
   	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
 };
 
+exports.obtenerTutorialesPorTemaPublicado = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const data = await Tutorial.obtenerTutorialesPorTemaPublicado();
+	const totalMinutes = duration[0].duracion;	
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};
+
+exports.obtenerTutorialesPorTemaFabricante = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const data = await Tutorial.obtenerTutorialesPorTemaFabricante();
+	const totalMinutes = duration[0].duracion;	
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};
+
+exports.obtenerTutorialesPorTemaIdioma = async (req, res, next) => {
+	const documents = await Tutorial.countDocuments();
+	const duration  = await Tutorial.obtenerDuracionTutoriales();
+	const data = await Tutorial.obtenerTutorialesPorTemaIdioma();
+	const totalMinutes = duration[0].duracion;	
+
+  	res.status(200).json({ success: true, count: documents, minutes: totalMinutes, data });
+};

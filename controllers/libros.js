@@ -47,9 +47,11 @@ exports.borrarLibro = asyncHandler(async (req, res, next) => {
 });
 
 exports.contarLibros = asyncHandler(async (req, res, next) => {
-	const documents = await Libro.countDocuments();
+	const libros  = await Libro.countDocuments();
+	const paginas = await Libro.obtenerPaginas();
+	const totalPaginas = paginas[0].paginas
 
-  	res.status(200).json({ success: true, count: documents });
+  	res.status(200).json({ success: true, libros, paginas: totalPaginas });
 });
 
 exports.obtenerLibrosPorTema = async (req, res, next) => {
