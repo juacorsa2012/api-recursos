@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
 const config = require('config');
 const faker  = require('faker');
-const Tema   = require('.././models/tema');
 const Enlace = require('.././models/enlace');
+const Tema   = require('.././models/tema');
 const MONGO_URI = config.get('mongo_uri');
-const nTemas = 20;
-const nEnlaces = 1000;
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
@@ -14,29 +12,22 @@ mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true
 });
 
-const seederTemas = async () => {  
-  await Tema.deleteMany();
-
-  for (let i = 0; i < nTemas; i++) {
-      await Tema.create({nombre: 'Tema ' + i})
-  }  
-}
+const nEnlaces = +process.argv[2];
 
 const seeder = async () => {
-  try {    
+  try {        
     console.log(`Registrando ${nEnlaces} enlaces ...`);    
+    await Enlace.deleteMany();	    
+    const nTemas = await Tema.countDocuments();
 
-    await seederTemas();
-    await Enlace.deleteMany();	
-    
     for (let i = 0; i < nEnlaces; i++) {
 		  const r = Math.floor(Math.random() * nTemas);
 		  const tema = await Tema.find().select('_id').limit(1).skip(r);		    
 
     	const enlace = {
-    		titulo: faker.lorem.sentence(),
-    		tema: tema[0]._id,
-    		url: faker.internet.url()
+    		titulo : faker.lorem.sentence(),
+    		tema   : tema[0]._id,
+    		url    : faker.internet.url()
     	}
 
     	await Enlace.create(enlace)    	

@@ -36,7 +36,7 @@ const seeder = async () => {
   }
 }
 
-seeder().then(res => {
+seeder().then(() => {
   process.exit()
 })
 
