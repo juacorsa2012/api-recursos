@@ -1,5 +1,11 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
+### Commit 20. 13-12-2019
+* Se refactoriza server.js
+
+### Commit 19. 12-12-2019
+* Se mejoran todos los seeders.
+
 ### Commit 18. 11-12-2019
 * Se desarrolla los métodos estáticos obtenerTutorialesPorTemaPublicado, obtenerTutorialesPorTemaFabricante y obtenerTutorialesPorTemaIdioma.
 
@@ -88,83 +94,3 @@
 * Se crea la estructura inicial del proyecto.
 * Se crean las carpetas routes, controllers, models, config, test, seeds, utils y middleware.
 * Se instala express y mongoose.
-
-
-
-
-
-
-db.libros.aggregate([   
-    {
-      $lookup: {
-        from: "temas",
-        localField: "tema",
-        foreignField: "_id",
-        as: "tema"
-    }},  
-
-    { $unwind: "$tema" },  
-    
-    
-    { $group : { _id : { tema: "$tema.nombre" }, total : { $sum : 1 } } },
-  
-    { $sort : { total : -1 } }    
-    
-])
-
-
-db.libros.aggregate([   
-    {
-      $lookup: {
-        from: "temas",
-        localField: "tema",
-        foreignField: "_id",
-        as: "tema"
-    }},  
-
-    { $unwind: "$tema" },     
-    { $group : { _id : { tema: "$tema.nombre", publicado: "$publicado" }, total : { $sum : 1 } } },
-  
-    { $sort : { total : -1 } }    
-    
-])
-
-
-db.enlaces.aggregate(
-    {    
-    $lookup: {
-        from: "temas",
-        localField: "tema",
-        foreignField: "_id",
-        as: "tema"
-    }},  
-    
-    { "$unwind": "$tema" },
-    
-    {"$group": {"_id" : null, "count" : { "$sum" :1 }, "data" : { "$push":"$$ROOT"}}},    
-   
-    {"$unwind":"$data"},    
-    
-    {"$group":{"_id": "$data.tema.nombre", "count" : {"$sum":1}, "total":{"$first":"$count"}}},
-
-    { $sort : { count : -1 } },
-    
-    {"$project":{ "count" : 1, "peso": {"$multiply":[{"$divide":[100,"$total"]},"$count"]}}}      
-) 
-
-
-9-12-19
-
-db.tutoriales.aggregate([
-    { $lookup  : { from: "temas", localField: "tema", foreignField: "_id", as: "tema" } },  
-   
-    { $unwind  : "$tema" },    
-
-    { $group   : { "_id" : "$tema", "duracion" : { "$sum" : "$duracion" }, "count" : { "$sum" : 1 }, "data" : { "$push":"$$ROOT"} }},
-
-    { $unwind  : "$data" },      
-
-    { $sort    : { count : -1 } }, 
-   
-    { $project : { _id : 0, tema : "$data.tema.nombre", duracion : 1, count : 1 } }
-  ])
