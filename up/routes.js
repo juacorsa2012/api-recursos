@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const temas = require('./routes/temas');
-const idiomas = require('./routes/idiomas');
-const editoriales = require('./routes/editoriales');
-const fabricantes = require('./routes/fabricantes');
-const enlaces = require('./routes/enlaces');
-const libros = require('./routes/libros');
-const tutoriales = require('./routes/tutoriales');
-const auth = require('./routes/auth');
-const errorHandler = require('./middleware/error');
+const temas = require('.././routes/temas');
+const idiomas = require('.././routes/idiomas');
+const editoriales = require('.././routes/editoriales');
+const fabricantes = require('.././routes/fabricantes');
+const enlaces = require('.././routes/enlaces');
+const libros = require('.././routes/libros');
+const tutoriales = require('.././routes/tutoriales');
+const auth = require('.././routes/auth');
+const errorHandler = require('.././middleware/error');
 
 module.exports = function(app) {
   app.use(express.json());

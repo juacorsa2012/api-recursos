@@ -1,18 +1,16 @@
 const express = require('express');
 const config = require('config');
-const db = require('./config/db');
+const conectarDB = require('./config/db');
 
 const app = express();
 
-db();
+conectarDB();	
 
-require('./routes')(app);
+require('./up/security')(app);
 
-const PORT = config.get('port');
+require('./up/routes')(app);
 
-const server = app.listen(
-  PORT,
-  console.log(`Servidor iniciado en modo ${process.env.NODE_ENV} en el puerto ${PORT}`));
+const server = require('./up/server')(app);
 
 process.on('unhandledRejection', (err, promise) => {
   console.error(`Error: ${err.message}`); 

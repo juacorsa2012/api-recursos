@@ -1,5 +1,13 @@
 # REST API de recursos con NodeJs, Express y MongoDB
 
+### Commit 21. 16-12-2019
+* Se instala express-mongo-sanitize para prevenir inyecciones NoSQL.
+* Se instala helmet para hacer más seguras las cabeceras.
+* Se instala xss-clean para evitar ataques XSS.
+* Se instala hpp.
+* Se instala express-rate-limit.
+* Se refactoriza server.js.
+
 ### Commit 20. 13-12-2019
 * Se refactoriza server.js
 
